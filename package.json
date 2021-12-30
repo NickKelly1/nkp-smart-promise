@@ -1,0 +1,55 @@
+{
+  "name": "---NPM-PACKAGE---",
+  "sideEffects": false,
+  "version": "0.0.1",
+  "description": "---PACKAGE-DESCRIPTION---",
+  "main": "cjs/index.js",
+  "module": "es/index.js",
+  "author": "Nick Kelly",
+  "homepage": "---GITHUB-URL---#readme",
+  "readme": "---GITHUB-URL---#readme",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "---GITHUB-URL---"
+  },
+  "bugs": {
+    "url": "---GITHUB-URL---/issues"
+  },
+  "engines": {
+    "node": ">=12.22.6"
+  },
+  "keywords": [
+    "TypeScript",
+    "JavaScript"
+  ],
+  "scripts": {
+    "test": "jest -c config/jest.config.ts",
+    "test:coverage": "jest -c config/jest.config.ts --coverage",
+    "test:watch": "jest -c config/jest.config.ts --watch",
+    "build": "rimraf dist && rollup -c config/rollup.config.js",
+    "publish:prepare": "cp package.json dist && cp LICENSE dist && cp README.md dist",
+    "lint": "eslint . --ext '*/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint . --ext '*/**/*.{js,jsx,ts,tsx}' --fix"
+  },
+  "devDependencies": {
+    "@jest/types": "^27.4.2",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.1",
+    "@types/jest": "^27.0.3",
+    "@types/rollup-plugin-peer-deps-external": "^2.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "eslint": "^8.5.0",
+    "jest": "^27.4.5",
+    "rimraf": "^3.0.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "rollup": "^2.62.0",
+    "ts-jest": "^27.1.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  }
+}
