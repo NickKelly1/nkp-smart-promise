@@ -1,7 +1,7 @@
 ## @nkp/smart-promise
 
 ![npm version](https://badge.fury.io/js/%40nkp%2Fsmart-promise.svg)
-[![Node.js Package](https://github.com/NickKelly1/smart-promise/actions/workflows/release.yml/badge.svg)](https://github.com/NickKelly1/nkp-smart-promise/actions/workflows/release.yml)
+[![Node.js Package](https://github.com/NickKelly1/nkp-smart-promise/actions/workflows/release.yml/badge.svg)](https://github.com/NickKelly1/nkp-smart-promise/actions/workflows/release.yml)
 ![Known Vulnerabilities](https://snyk.io/test/github/NickKelly1/nkp-smart-promise/badge.svg)
 
 SmartPromise is a Promise that can be resolved from outside it's executor.
