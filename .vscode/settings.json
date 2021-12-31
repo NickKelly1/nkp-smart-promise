@@ -1,5 +1,5 @@
 {
-  "window.title": "---NPM-PACKAGE---",
+  "window.title": "@nkp/smart-promise",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },

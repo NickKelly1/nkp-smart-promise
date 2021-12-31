@@ -1,21 +1,21 @@
 {
-  "name": "---NPM-PACKAGE---",
+  "name": "@nkp/smart-promise",
   "sideEffects": false,
   "version": "0.0.1",
-  "description": "---PACKAGE-DESCRIPTION---",
+  "description": "SmartPromise is a Promise that can be resolved from outside it's executor.",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "author": "Nick Kelly",
-  "homepage": "---GITHUB-URL---#readme",
-  "readme": "---GITHUB-URL---#readme",
+  "homepage": "https://github.com/NickKelly1/nkp-smart-promise.git#readme",
+  "readme": "https://github.com/NickKelly1/nkp-smart-promise.git#readme",
   "license": "MIT",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "---GITHUB-URL---"
+    "url": "https://github.com/NickKelly1/nkp-smart-promise.git"
   },
   "bugs": {
-    "url": "---GITHUB-URL---/issues"
+    "url": "https://github.com/NickKelly1/nkp-smart-promise.git/issues"
   },
   "engines": {
     "node": ">=12.22.6"
@@ -38,7 +38,7 @@
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.1.1",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "^27.4.0",
     "@types/rollup-plugin-peer-deps-external": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",

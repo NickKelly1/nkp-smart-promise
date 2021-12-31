@@ -1,5 +1,0 @@
-{
-  "first": "property",
-  "second": ["property"],
-  "third": { "property": true }
-}
