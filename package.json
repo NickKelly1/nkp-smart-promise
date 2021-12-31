@@ -1,7 +1,7 @@
 {
   "name": "@nkp/smart-promise",
   "sideEffects": false,
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "SmartPromise is a Promise that can be resolved from outside it's executor.",
   "main": "cjs/index.js",
   "module": "es/index.js",
