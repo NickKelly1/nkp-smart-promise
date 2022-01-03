@@ -42,6 +42,36 @@ export interface RejectedPromsie<T> extends SmartPromise<T> {
 }
 
 /**
+ * Is the promise-like value a promise?
+ *
+ * @param unknown value to check
+ * @returns       whether the value is promise-like
+ */
+export function isPromise<U>(like: PromiseLike<U>): like is Promise<U> {
+  // must have `catch`-like function
+  if (typeof (like as any).catch !== 'function') return false;
+  // success
+  return true;
+}
+
+/**
+ * Is the value promise-like?
+ *
+ * @param unknown value to check
+ * @returns       whether the value is promise-like
+ */
+export function isPromiseLike(unknown: unknown): unknown is PromiseLike<unknown> {
+  // must be defined
+  if (!unknown) return false;
+  // must be object
+  if (typeof unknown !== 'object') return false;
+  // must have `then`-like function
+  if (typeof (unknown as any).then !== 'function') return false;
+  // success
+  return true;
+}
+
+/**
  * SmartPromise is a Promise that can be resolved or rejected from outside
  * it's executor function.
  *
@@ -88,44 +118,79 @@ export class SmartPromise<T> extends Promise<T> {
     let _resolve: PromiseResolve<T>;
     let _reject: PromiseReject;
     let superCallFinished = false;
-    let _value: undefined | T | PromiseLike<T> = undefined;
+    const _value: undefined | T = undefined;
     let _reason: undefined | unknown = undefined;
     let _isFulfilled = false;
     let _isResolved = false;
     let _isRejected = false;
+
     super((rawResolve, rawReject) => {
       // hijack the resolve and reject functions given to the promise executor
       // so we can bind them to the class instance and allow them to be called
       // from outside the executors context
 
-      _resolve = (value) => {
+      /**
+       * Resolves the unwrapped value of the promise-like resolved value
+       *
+       * @param innerValue
+       */
+      const resolveInner = (innerValue: T) => {
         if (!superCallFinished) {
           // we can't reference `this` until super call completes
           // store local variables and bind to `this` after `super` call
           // completes
           _isFulfilled = true;
           _isResolved = true;
-          _value = value;
         } else {
           this._isFulfilled = true;
           this._isResolved = true;
-          this._value = value;
+          this._value = innerValue;
         }
-        rawResolve(value);
+        rawResolve(innerValue);
       };
 
-      _reject = (reason) => {
+      /**
+       * Resolves the unwrapped value of the possibly promise-like resolved
+       * value
+       *
+       * @param innerValue
+       */
+      const rejectInner = (innerReason: unknown) => {
         // ensure we don't call "this" until super call completes
         if (!superCallFinished) {
           _isFulfilled = true;
           _isRejected = true;
-          _reason = reason;
+          _reason = innerReason;
         } else {
           this._isFulfilled = true;
           this._isRejected = true;
-          this._reason = reason;
+          this._reason = innerReason;
         }
-        rawReject(reason);
+        rawReject(innerReason);
+      };
+
+      _resolve = (value) => {
+        if (isPromiseLike(value)) {
+          // promise
+          if (isPromise(value)) value.then(resolveInner).catch(rejectInner);
+          // promise-like but not promise
+          else value.then(resolveInner);
+        } else {
+          // not promise-like
+          resolveInner(value);
+        }
+      };
+
+      _reject = (reason) => {
+        if (isPromiseLike(reason)) {
+          // promise
+          if (isPromise(reason)) reason.then(rejectInner).catch(rejectInner);
+          // promise-like but not promise
+          else reason.then(rejectInner);
+        } else {
+          // not promise-like
+          rejectInner(reason);
+        }
       };
 
       // allow normal execution (from the callees perspective) to run

@@ -77,12 +77,74 @@ describe('SmartPromise', () => {
   it('should allow for rejection outside of the executor function', () => {
     const promise = new SmartPromise<number>();
     // catch to avoid process throwing an UNHANDLED_PROMISE_REJECTION
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     promise.catch(() => {});
     expect(promise.isRejected()).toBeFalsy();
     expect(promise.reason).toBeUndefined();
     promise.reject('fail');
     expect(promise.isRejected()).toBeTruthy();
     expect(promise.reason).toBe('fail');
+  });
+
+  it('should resolve the inner value of a resolved resolving promise', async () => {
+    const promise = new SmartPromise<number>();
+    expect(promise.isFulfilled()).toBeFalsy();
+    expect(promise.isResolved()).toBeFalsy();
+    expect(promise.isRejected()).toBeFalsy();
+    expect(promise.value).toBe(undefined);
+    const innerp = Promise.resolve(5);
+    promise.resolve(innerp);
+    await innerp;
+    expect(promise.isFulfilled()).toBeTruthy();
+    expect(promise.isResolved()).toBeTruthy();
+    expect(promise.isRejected()).toBeFalsy();
+    expect(promise.value).toBe(5);
+  });
+
+  it('should reject the inner value of a resolved rejecting promise', async () => {
+    const promise = new SmartPromise<number>();
+    promise.catch(() => {});
+    expect(promise.isFulfilled()).toBeFalsy();
+    expect(promise.isResolved()).toBeFalsy();
+    expect(promise.isRejected()).toBeFalsy();
+    expect(promise.value).toBe(undefined);
+    const innerp = Promise.reject('reason');
+    promise.resolve(innerp);
+    await innerp.catch(() => {});
+    expect(promise.isFulfilled()).toBeTruthy();
+    expect(promise.isResolved()).toBeFalsy();
+    expect(promise.isRejected()).toBeTruthy();
+    expect(promise.reason).toBe('reason');
+  });
+
+  it('should reject the inner value of a rejected resolving promise', async () => {
+    const promise = new SmartPromise<number>();
+    promise.catch(() => {});
+    expect(promise.isFulfilled()).toBeFalsy();
+    expect(promise.isResolved()).toBeFalsy();
+    expect(promise.isRejected()).toBeFalsy();
+    expect(promise.value).toBe(undefined);
+    const innerp = Promise.resolve('reason');
+    promise.reject(innerp);
+    await innerp;
+    expect(promise.isFulfilled()).toBeTruthy();
+    expect(promise.isResolved()).toBeFalsy();
+    expect(promise.isRejected()).toBeTruthy();
+    expect(promise.reason).toBe('reason');
+  });
+
+  it('should reject the inner value of a rejected rejecting promise', async () => {
+    const promise = new SmartPromise<number>();
+    promise.catch(() => {});
+    expect(promise.isFulfilled()).toBeFalsy();
+    expect(promise.isResolved()).toBeFalsy();
+    expect(promise.isRejected()).toBeFalsy();
+    expect(promise.value).toBe(undefined);
+    const innerp = Promise.reject('reason');
+    promise.reject(innerp);
+    await innerp.catch(() => {});
+    expect(promise.isFulfilled()).toBeTruthy();
+    expect(promise.isResolved()).toBeFalsy();
+    expect(promise.isRejected()).toBeTruthy();
+    expect(promise.reason).toBe('reason');
   });
 });
