@@ -42,42 +42,43 @@ export interface RejectedPromsie<T> extends SmartPromise<T> {
 }
 
 /**
- * Is the promise-like value a promise?
- *
- * @param unknown value to check
- * @returns       whether the value is promise-like
- */
-export function isPromise<U>(like: PromiseLike<U>): like is Promise<U> {
-  // must have `catch`-like function
-  if (typeof (like as any).catch !== 'function') return false;
-  // success
-  return true;
-}
-
-/**
- * Is the value promise-like?
- *
- * @param unknown value to check
- * @returns       whether the value is promise-like
- */
-export function isPromiseLike(unknown: unknown): unknown is PromiseLike<unknown> {
-  // must be defined
-  if (!unknown) return false;
-  // must be object
-  if (typeof unknown !== 'object') return false;
-  // must have `then`-like function
-  if (typeof (unknown as any).then !== 'function') return false;
-  // success
-  return true;
-}
-
-/**
  * SmartPromise is a Promise that can be resolved or rejected from outside
  * it's executor function.
  *
  * @see {@link Promise}
  */
 export class SmartPromise<T> extends Promise<T> {
+  /**
+   * Is the promise-like value a promise?
+   *
+   * @param unknown value to check
+   * @returns       whether the value is promise-like
+   */
+  static isPromise<U>(like: PromiseLike<U>): like is Promise<U> {
+    // must have `catch`-like function
+    if (typeof (like as any).catch !== 'function') return false;
+    // success
+    return true;
+  }
+
+  /**
+   * Is the value promise-like?
+   *
+   * @param unknown value to check
+   * @returns       whether the value is promise-like
+   */
+  static isPromiseLike(unknown: unknown): unknown is PromiseLike<unknown> {
+    // must be defined
+    if (!unknown) return false;
+    // must be object
+    if (typeof unknown !== 'object') return false;
+    // must have `then`-like function
+    if (typeof (unknown as any).then !== 'function') return false;
+    // success
+    return true;
+  }
+
+
   /**
    * If the SmartPromise resolved, the value that the SmartPromise resolved with
    */
@@ -170,9 +171,11 @@ export class SmartPromise<T> extends Promise<T> {
       };
 
       _resolve = (value) => {
-        if (isPromiseLike(value)) {
+        if (SmartPromise.isPromiseLike(value)) {
           // promise
-          if (isPromise(value)) value.then(resolveInner).catch(rejectInner);
+          if (SmartPromise.isPromise(value)) value
+            .then(resolveInner)
+            .catch(rejectInner);
           // promise-like but not promise
           else value.then(resolveInner);
         } else {
@@ -182,9 +185,11 @@ export class SmartPromise<T> extends Promise<T> {
       };
 
       _reject = (reason) => {
-        if (isPromiseLike(reason)) {
+        if (SmartPromise.isPromiseLike(reason)) {
           // promise
-          if (isPromise(reason)) reason.then(rejectInner).catch(rejectInner);
+          if (SmartPromise.isPromise(reason)) reason
+            .then(rejectInner)
+            .catch(rejectInner);
           // promise-like but not promise
           else reason.then(rejectInner);
         } else {

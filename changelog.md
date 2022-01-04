@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.5 - 2022-01-04
+
+### Changed
+
+- Updated exports
+
 ## 0.0.4 - 2022-01-03
 
 ### Changed
