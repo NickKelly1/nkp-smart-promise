@@ -29,7 +29,7 @@ export interface PromiseExecutor<T> {
  * SmartPromise that has been resolved
  */
 export interface ResolvedPromise<T> extends SmartPromise<T> {
-  readonly value: T | PromiseLike<T>;
+  readonly value: T;
   readonly reason: undefined;
 }
 
@@ -82,7 +82,7 @@ export class SmartPromise<T> extends Promise<T> {
   /**
    * If the SmartPromise resolved, the value that the SmartPromise resolved with
    */
-  get value(): undefined | T | PromiseLike<T> {
+  get value(): undefined | T {
     return this._value;
   }
 
@@ -94,7 +94,7 @@ export class SmartPromise<T> extends Promise<T> {
     return this._reason;
   }
 
-  protected _value!: undefined | T | PromiseLike<T>;
+  protected _value!: undefined | T;
   protected _reason!: undefined | unknown;
   protected _resolve!: PromiseResolve<T>;
   protected _reject!: PromiseReject;

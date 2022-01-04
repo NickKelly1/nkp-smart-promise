@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.6 - 2022-01-04
+
+### Updated
+
+- Fixed minor type issue
+
 ## 0.0.5 - 2022-01-04
 
 ### Changed
